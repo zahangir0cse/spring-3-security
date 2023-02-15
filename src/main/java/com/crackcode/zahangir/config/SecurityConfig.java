@@ -2,7 +2,6 @@ package com.crackcode.zahangir.config;
 
 import com.crackcode.zahangir.service.impl.UserDetailsServiceImpl;
 import com.crackcode.zahangir.utils.UrlConstraint;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +13,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -36,19 +34,6 @@ public class SecurityConfig  {
         this.unauthorizedHandler = unauthorizedHandler;
         this.customFilter = customFilter;
     }
-   /* @Bean
-    UserDetailsService customUserDetailsService() {
-        return userDetailsService;
-    }
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationManagerBuilder auth) throws Exception {
-        return auth.userDetailsService(customUserDetailsService()).passwordEncoder(passwordEncoder).and().build();
-    }*/
-
-    /*@Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
-    }*/
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
     public AuthenticationManager authenticationManagerBean(HttpSecurity httpSecurity) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder = httpSecurity.getSharedObject(AuthenticationManagerBuilder.class);
@@ -84,41 +69,4 @@ public class SecurityConfig  {
                 .ignoring()
                 .requestMatchers("/css/**", "/js/**", "/img/**", "/lib/**", "/favicon.ico");
     }
-
-    /*@Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {//Authentication
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
-    }
-
-    @Bean(BeanIds.AUTHENTICATION_MANAGER)
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {//Authorization
-        String allPrefix = "/**";
-        http.cors()
-                .and()
-                .csrf()
-                .disable()
-                .exceptionHandling()
-                .authenticationEntryPoint(unauthorizedHandler)
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests()
-                .antMatchers(UrlConstraint.AuthManagement.ROOT + allPrefix)
-                .permitAll()
-                .anyRequest()
-                .authenticated();
-        http.addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class);
-    }
-
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers(resourcePath +"/**");
-    }*/
 }
